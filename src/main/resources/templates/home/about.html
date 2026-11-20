@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(~{::title}, ~{::main})}">
+<head>
+    <title th:text="#{home.about.title}">Giới thiệu</title>
+</head>
+<body>
+<main class="container">
+    <h1 th:text="#{home.about.heading}">Giới thiệu</h1>
+    <p th:text="#{home.about.intro(${systemName})}">Hệ thống hỗ trợ sinh viên đặt lịch tư vấn.</p>
+    <h2 th:text="#{home.about.featuresTitle}">Hệ thống giúp bạn</h2>
+    <ul>
+        <li th:text="#{home.about.feature1}">Xem danh sách gói tư vấn.</li>
+        <li th:text="#{home.about.feature2}">Đặt lịch tư vấn.</li>
+        <li th:text="#{home.about.feature3}">Theo dõi lịch đã đặt.</li>
+    </ul>
+</main>
+</body>
+</html>

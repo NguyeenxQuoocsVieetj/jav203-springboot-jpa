@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(~{::title}, ~{::main})}">
+<head>
+    <title th:text="#{booking.title.list}">Lịch đặt</title>
+</head>
+<body>
+<main class="container">
+    <h1 th:text="#{${pageTitle}}">Lịch đặt</h1>
+
+    <p class="flash" th:if="${messageKey}" th:text="#{${messageKey}}">Thông báo</p>
+    <p class="empty" th:if="${#lists.isEmpty(bookings)}" th:text="#{booking.list.empty}">Chưa có lịch đặt nào.</p>
+
+    <div class="table-wrap" th:unless="${#lists.isEmpty(bookings)}">
+        <table>
+            <thead>
+            <tr>
+                <th th:text="#{booking.list.col.id}">Mã</th>
+                <th th:text="#{booking.list.col.fullName}">Họ tên</th>
+                <th th:text="#{booking.list.col.package}">Gói tư vấn</th>
+                <th th:text="#{booking.list.col.consultant}">Chuyên viên</th>
+                <th th:text="#{booking.list.col.date}">Ngày</th>
+                <th th:text="#{booking.list.col.time}">Khung giờ</th>
+                <th th:text="#{booking.list.col.status}">Trạng thái</th>
+                <th th:text="#{booking.list.col.attachment}">Tài liệu</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="b : ${bookings}">
+                <td th:text="${b.id}">1</td>
+                <td th:text="${b.fullName}">Họ tên</td>
+                <td th:text="${packageNames[b.packageId]}">Gói</td>
+                <td th:text="${consultantNames[b.consultantId]}">Chuyên viên</td>
+                <td th:text="${#temporals.format(b.preferredDate, 'dd/MM/yyyy')}">01/01/2026</td>
+                <td th:text="${b.preferredTime}">08:00 - 10:00</td>
+                <td>
+                    <th:block th:switch="${b.status?.name()}">
+                        <span th:case="'NEW'" class="badge badge-new" th:text="#{booking.status.NEW}">Mới</span>
+                        <span th:case="'CONFIRMED'" class="badge badge-confirmed" th:text="#{booking.status.CONFIRMED}">Đã xác nhận</span>
+                        <span th:case="'DONE'" class="badge badge-done" th:text="#{booking.status.DONE}">Hoàn thành</span>
+                        <span th:case="'CANCELLED'" class="badge badge-cancelled" th:text="#{booking.status.CANCELLED}">Đã hủy</span>
+                        <span th:case="*" class="badge" th:text="#{booking.status.unknown}">Không xác định</span>
+                    </th:block>
+                </td>
+                <td th:text="${b.attachmentOriginalName ?: '—'}">—</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+</body>
+</html>

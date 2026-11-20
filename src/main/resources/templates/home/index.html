@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(~{::title}, ~{::main})}">
+<head>
+    <title th:text="#{home.index.title}">Trang chủ</title>
+</head>
+<body>
+<main class="container">
+    <section class="hero">
+        <h1 th:text="${systemName}">CareerPath Booking Portal</h1>
+        <p th:text="#{home.description}">Mô tả hệ thống</p>
+        <div class="stats">
+            <div class="stat">
+                <strong th:text="${totalPackages}">0</strong>
+                <span th:text="#{home.stat.packages}">Gói tư vấn</span>
+            </div>
+            <div class="stat">
+                <strong th:text="${totalBookings}">0</strong>
+                <span th:text="#{home.stat.bookings}">Lượt đặt lịch</span>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2 th:text="#{home.featured.packages}">Gói tư vấn nổi bật</h2>
+        <p class="empty" th:if="${#lists.isEmpty(featuredPackages)}" th:text="#{home.empty.packages}">Hiện chưa có gói tư vấn nào.</p>
+        <div class="grid" th:unless="${#lists.isEmpty(featuredPackages)}">
+            <article class="card" th:each="p : ${featuredPackages}">
+                <img th:src="${p.image ?: '/images/default-package.svg'}" th:alt="${p.name}">
+                <h3 th:text="${p.name}">Tên gói</h3>
+                <p class="muted" th:text="${p.description}">Mô tả</p>
+                <p>
+                    <strong th:text="|${#numbers.formatDecimal(p.price, 0, 'POINT', 0, 'COMMA')} #{unit.currency}|">0 VNĐ</strong>
+                    <span class="muted" th:text="' · ' + #{unit.duration(${p.duration})}">· 60 phút</span>
+                </p>
+            </article>
+        </div>
+    </section>
+
+    <section>
+        <h2 th:text="#{home.featured.consultants}">Chuyên viên tiêu biểu</h2>
+        <p class="empty" th:if="${#lists.isEmpty(featuredConsultants)}" th:text="#{home.empty.consultants}">Hiện chưa có chuyên viên nào.</p>
+        <div class="grid" th:unless="${#lists.isEmpty(featuredConsultants)}">
+            <article class="card" th:each="c : ${featuredConsultants}">
+                <h3 th:text="${c.fullName}">Tên chuyên viên</h3>
+                <p class="muted" th:text="${c.specialty}">Chuyên môn</p>
+            </article>
+        </div>
+    </section>
+</main>
+</body>
+</html>
