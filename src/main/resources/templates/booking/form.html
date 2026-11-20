@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(~{::title}, ~{::main})}">
+<head>
+    <title th:text="#{booking.title.form}">Đặt lịch tư vấn</title>
+</head>
+<body>
+<main class="container">
+    <h1 th:text="#{${pageTitle}}">Đặt lịch tư vấn</h1>
+
+    <form class="form-card" th:object="${bookingForm}" th:action="@{/booking/save}"
+          method="post" enctype="multipart/form-data">
+
+        <div class="form-errors" th:if="${#fields.hasAnyErrors() or uploadTooLarge}">
+            <p><strong th:text="#{booking.form.errorSummary}">Vui lòng kiểm tra lại thông tin bên dưới.</strong></p>
+            <p th:if="${uploadTooLarge}" th:text="#{booking.upload.tooLarge}"></p>
+        </div>
+
+        <label><span th:text="#{booking.form.fullName}">Họ tên</span>
+            <input type="text" th:field="*{fullName}" th:classappend="${#fields.hasErrors('fullName')} ? 'is-invalid'">
+            <small class="field-error" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></small>
+        </label>
+
+        <label><span th:text="#{booking.form.email}">Email</span>
+            <input type="text" th:field="*{email}" th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'">
+            <small class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></small>
+        </label>
+
+        <label><span th:text="#{booking.form.phone}">Số điện thoại</span>
+            <input type="text" th:field="*{phone}" th:classappend="${#fields.hasErrors('phone')} ? 'is-invalid'">
+            <small class="field-error" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></small>
+        </label>
+
+        <label><span th:text="#{booking.form.package}">Gói tư vấn</span>
+            <select th:field="*{consultationPackageId}" th:classappend="${#fields.hasErrors('consultationPackageId')} ? 'is-invalid'">
+                <option value="" th:text="#{booking.form.selectPackage}">-- Chọn gói --</option>
+                <option th:each="p : ${packages}" th:value="${p.id}" th:text="${p.name}">Gói</option>
+            </select>
+            <small class="field-error" th:if="${#fields.hasErrors('consultationPackageId')}" th:errors="*{consultationPackageId}"></small>
+        </label>
+
+        <label><span th:text="#{booking.form.consultant}">Chuyên viên</span>
+            <select th:field="*{consultantId}" th:classappend="${#fields.hasErrors('consultantId')} ? 'is-invalid'">
+                <option value="" th:text="#{booking.form.selectConsultant}">-- Chọn chuyên viên --</option>
+                <option th:each="c : ${consultants}" th:value="${c.id}" th:text="${c.fullName}">Chuyên viên</option>
+            </select>
+            <small class="field-error" th:if="${#fields.hasErrors('consultantId')}" th:errors="*{consultantId}"></small>
+        </label>
+
+        <label><span th:text="#{booking.form.date}">Ngày mong muốn</span>
+            <input type="date" th:field="*{preferredDate}" th:classappend="${#fields.hasErrors('preferredDate')} ? 'is-invalid'">
+            <small class="field-error" th:if="${#fields.hasErrors('preferredDate')}" th:errors="*{preferredDate}"></small>
+        </label>
+
+        <label><span th:text="#{booking.form.time}">Khung giờ</span>
+            <select th:field="*{preferredTime}" th:classappend="${#fields.hasErrors('preferredTime')} ? 'is-invalid'">
+                <option value="" th:text="#{booking.form.selectTime}">-- Chọn khung giờ --</option>
+                <option th:each="slot : ${timeSlots}" th:value="${slot}" th:text="${slot}">08:00 - 10:00</option>
+            </select>
+            <small class="field-error" th:if="${#fields.hasErrors('preferredTime')}" th:errors="*{preferredTime}"></small>
+        </label>
+
+        <label><span th:text="#{booking.form.note}">Ghi chú</span>
+            <textarea th:field="*{note}" rows="3" th:classappend="${#fields.hasErrors('note')} ? 'is-invalid'"></textarea>
+            <small class="field-error" th:if="${#fields.hasErrors('note')}" th:errors="*{note}"></small>
+        </label>
+
+        <label><span th:text="#{booking.form.attachment}">Tài liệu đính kèm (tùy chọn)</span>
+            <input type="file" name="attachment" accept=".pdf,.jpg,.jpeg,.png,.docx">
+            <small class="field-error" th:if="${#fields.hasErrors('attachment')}" th:errors="*{attachment}"></small>
+            <small class="field-hint" th:if="${#fields.hasErrors('attachment') or uploadTooLarge}" th:text="#{booking.form.reselectFile}">Vui lòng chọn lại file.</small>
+        </label>
+
+        <button type="submit" class="btn" th:text="#{booking.form.submit}">Xác nhận đặt lịch</button>
+    </form>
+</main>
+</body>
+</html>

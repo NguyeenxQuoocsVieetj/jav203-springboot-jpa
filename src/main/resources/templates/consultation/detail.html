@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(~{::title}, ~{::main})}">
+<head>
+    <title th:text="#{consultation.title.detail}">Chi tiết gói tư vấn</title>
+</head>
+<body>
+<main class="container">
+    <article class="detail">
+        <img th:src="${pkg.image ?: '/images/default-package.svg'}" th:alt="${pkg.name}">
+        <div>
+            <h1 th:text="${pkg.name}">Tên gói</h1>
+            <p class="muted" th:text="${categoryNames[pkg.categoryId]}">Loại</p>
+            <p th:text="${pkg.description}">Mô tả</p>
+            <ul class="facts">
+                <li><strong th:text="#{consultation.detail.price}">Giá:</strong>
+                    <span th:text="|${#numbers.formatDecimal(pkg.price, 0, 'POINT', 0, 'COMMA')} #{unit.currency}|"></span></li>
+                <li><strong th:text="#{consultation.detail.duration}">Thời lượng:</strong>
+                    <span th:text="#{unit.duration(${pkg.duration})}"></span></li>
+                <li><strong th:text="#{consultation.detail.consultant}">Chuyên viên:</strong>
+                    <span th:text="${consultant != null} ? ${consultant.fullName} : #{consultation.detail.unassigned}"></span></li>
+            </ul>
+            <a class="btn" th:href="@{/booking/form(packageId=${pkg.id})}" th:text="#{consultation.detail.book}">Đặt lịch</a>
+        </div>
+    </article>
+
+    <section>
+        <h2 th:text="#{consultation.detail.related}">Gói cùng loại</h2>
+        <p class="empty" th:if="${#lists.isEmpty(related)}" th:text="#{consultation.detail.noRelated}">Chưa có gói nào cùng loại.</p>
+        <div class="grid" th:unless="${#lists.isEmpty(related)}">
+            <article class="card" th:each="r : ${related}">
+                <h3 th:text="${r.name}">Tên gói</h3>
+                <p><strong th:text="|${#numbers.formatDecimal(r.price, 0, 'POINT', 0, 'COMMA')} #{unit.currency}|"></strong></p>
+                <a class="btn btn-outline" th:href="@{/consultation/detail/{id}(id=${r.id})}" th:text="#{consultation.action.detail}">Xem chi tiết</a>
+            </article>
+        </div>
+    </section>
+</main>
+</body>
+</html>

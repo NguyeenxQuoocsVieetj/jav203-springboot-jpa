@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<header th:fragment="menu" class="site-header">
+    <div class="container nav-wrap">
+        <a class="brand" th:href="@{/home/index}" th:text="#{site.brand}">CareerPath</a>
+        <nav>
+            <a th:href="@{/home/index}" th:text="#{nav.home}"
+               th:classappend="${activeMenu == 'index'} ? 'active'">Trang chủ</a>
+            <a th:href="@{/home/about}" th:text="#{nav.about}"
+               th:classappend="${activeMenu == 'about'} ? 'active'">Giới thiệu</a>
+            <a th:href="@{/home/help}" th:text="#{nav.help}"
+               th:classappend="${activeMenu == 'help'} ? 'active'">Trợ giúp</a>
+            <a th:href="@{/consultation/list}" th:text="#{nav.consultation}"
+               th:classappend="${activeMenu == 'consultation'} ? 'active'">Gói tư vấn</a>
+            <a th:href="@{/booking/list}" th:text="#{nav.booking}"
+               th:classappend="${activeMenu == 'booking'} ? 'active'">Lịch đặt</a>
+            <span class="lang-switch">
+                <a th:href="${viUrl}" th:text="#{nav.lang.vi}">Tiếng Việt</a> |
+                <a th:href="${enUrl}" th:text="#{nav.lang.en}">English</a>
+            </span>
+        </nav>
+    </div>
+</header>
+</body>
+</html>

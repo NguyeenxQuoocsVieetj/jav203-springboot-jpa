@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(~{::title}, ~{::main})}">
+<head>
+    <title th:text="#{consultation.title.all}">Gói tư vấn</title>
+</head>
+<body>
+<main class="container">
+    <h1 th:text="#{${pageTitle}}">Gói tư vấn</h1>
+
+    <div class="toolbar">
+        <form class="inline-form" th:action="@{/consultation/search}" method="get">
+            <input type="text" name="keyword" th:value="${keyword}" th:placeholder="#{consultation.placeholder.keyword}">
+            <button type="submit" class="btn" th:text="#{consultation.action.search}">Tìm kiếm</button>
+        </form>
+        <form class="inline-form" th:action="@{/consultation/search-price}" method="get">
+            <input type="number" name="min" min="0" th:value="${minPrice}" th:placeholder="#{consultation.placeholder.min}">
+            <input type="number" name="max" min="0" th:value="${maxPrice}" th:placeholder="#{consultation.placeholder.max}">
+            <button type="submit" class="btn" th:text="#{consultation.action.filterPrice}">Lọc theo giá</button>
+        </form>
+    </div>
+
+    <nav class="chips">
+        <a th:href="@{/consultation/list}" th:text="#{consultation.chip.all}"
+           th:classappend="${selectedCategory == null} ? 'active'">Tất cả</a>
+        <a th:each="c : ${categories}"
+           th:href="@{/consultation/category/{id}(id=${c.id})}"
+           th:classappend="${selectedCategory == c.id} ? 'active'"
+           th:text="${c.name}">Loại</a>
+    </nav>
+
+    <p class="empty" th:if="${#lists.isEmpty(packages)}" th:text="#{consultation.empty}">Không tìm thấy gói tư vấn phù hợp.</p>
+
+    <div class="grid" th:unless="${#lists.isEmpty(packages)}">
+        <article class="card" th:each="p : ${packages}">
+            <img th:src="${p.image ?: '/images/default-package.svg'}" th:alt="${p.name}">
+            <h3 th:text="${p.name}">Tên gói</h3>
+            <p class="muted" th:text="${categoryNames[p.categoryId]}">Loại</p>
+            <p class="muted" th:text="${p.description}">Mô tả</p>
+            <p>
+                <strong th:text="|${#numbers.formatDecimal(p.price, 0, 'POINT', 0, 'COMMA')} #{unit.currency}|">0 VNĐ</strong>
+                <span class="muted" th:text="' · ' + #{unit.duration(${p.duration})}">· 60 phút</span>
+            </p>
+            <a class="btn btn-outline" th:href="@{/consultation/detail/{id}(id=${p.id})}" th:text="#{consultation.action.detail}">Xem chi tiết</a>
+        </article>
+    </div>
+</main>
+</body>
+</html>
